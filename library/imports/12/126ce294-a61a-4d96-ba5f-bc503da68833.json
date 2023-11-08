@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn-kaishi",
+    "texture": "b8aa16d2-3435-4fd3-9903-e81949d4fa09",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      342,
+      150
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      342,
+      150
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

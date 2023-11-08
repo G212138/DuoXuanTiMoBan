@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_zhengque",
+    "texture": "1324a748-94a7-4abb-9f90-83dbbba27b21",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      367,
+      215
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      367,
+      215
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

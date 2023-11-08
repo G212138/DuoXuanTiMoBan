@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_xuantikuang",
+    "texture": "3d3018a3-7a66-4983-96fd-804920b352f2",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      367,
+      215
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      367,
+      215
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

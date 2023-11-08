@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_timukuang",
+    "texture": "41985b5a-30de-4090-b398-1f999e83bc17",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1002,
+      609
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1002,
+      609
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

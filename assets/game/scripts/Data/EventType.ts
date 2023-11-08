@@ -1,0 +1,20 @@
+/**
+ * 自定义事件类型
+ */
+
+export enum EventType {
+    // examp
+    ON_BUTTON_CLICKED = 'ON_BUTTON_CLICKED',
+
+    ENTER_GAME = 'ENTER_GAME',
+    GAME_RECONNECT = "GAME_RECONNECT",
+    GAME_OVER = "GAME_OVER",
+    SUBMIT = "SUBMIT",
+    GAME_REPLAY = "GAME_REPLAY",
+
+    CLICK_OPTION = "CLICK_OPTION",
+    CHANGE_ANI = "CHANGE_ANI",
+    NEXT_LEVEL = "NEXT_LEVEL",
+    SHOW_QUESTION = "SHOW_QUESTION",
+    SYNC_GAME_OVER = "SYNC_GAME_OVER",
+}
