@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_wutaishengjiangtai",
+    "texture": "3db2ba8f-af12-44a1-8ebf-bcd7b6e25b5a",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      236,
+      72
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      236,
+      72
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

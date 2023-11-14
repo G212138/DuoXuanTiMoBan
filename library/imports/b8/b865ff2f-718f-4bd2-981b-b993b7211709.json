@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "checkmask",
+    "texture": "c714c3f8-258b-4414-af92-721a13f9d649",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      102,
+      109
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      102,
+      109
+    ],
+    "capInsets": [
+      34,
+      35,
+      36,
+      38
+    ]
+  }
+}

@@ -6,7 +6,7 @@ import BaseTeacherPanel from '../../../../frame/scripts/UI/Panel/BaseTeacherPane
 import SubmissionPanel from '../../../../frame/scripts/UI/Panel/SubmissionPanel';
 import { UIHelp } from '../../../../frame/scripts/Utils/UIHelp';
 import { ConstValue } from '../../Data/ConstValue';
-import { EditorManager, GameData } from '../../Manager/EditorManager';
+import { EditorManager, GameData, opinionPara } from '../../Manager/EditorManager';
 import GamePanel from './GamePanel';
 
 const { ccclass, property } = cc._decorator;
@@ -37,7 +37,6 @@ export default class TeacherPanel extends BaseTeacherPanel {
         if (this._btn_save) {
             this._btn_save.active = !isEdit;
         }
-        // this._btn_save.active = true;
     }
 
     /**
@@ -51,24 +50,24 @@ export default class TeacherPanel extends BaseTeacherPanel {
 
         //先默认设置几题题目
         EditorManager.editorData.GameData = [];
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
             let gameData = new GameData();
             let defaultLevelData = ConstValue.defaultLevelData[i];
             gameData.questionText = defaultLevelData.questionText;
             gameData.questionPic = defaultLevelData.questionPic;
             gameData.opinion = defaultLevelData.opinion;
-            gameData.answer = defaultLevelData.answer;
-            gameData.opinionText1 = defaultLevelData.opinionText1;
-            gameData.opinionPic1 = defaultLevelData.opinionPic1;
-            gameData.opinionText2 = defaultLevelData.opinionText2;
-            gameData.opinionPic2 = defaultLevelData.opinionPic2;
-            gameData.opinionText3 = defaultLevelData.opinionText3;
-            gameData.opinionPic3 = defaultLevelData.opinionPic3;
-            gameData.opinionText4 = defaultLevelData.opinionText4;
-            gameData.opinionPic4 = defaultLevelData.opinionPic4;
-            gameData.opinionText5 = defaultLevelData.opinionText5;
-            gameData.opinionPic5 = defaultLevelData.opinionPic5;
+            gameData.answerId = defaultLevelData.answer;
+            
+            let answerArr: opinionPara[] = [];
+            for (let j = 0; j < defaultLevelData.opinion; j++) {
+                let answer = new opinionPara();
+                answer.id = j;
+                answer.opinionText = defaultLevelData.opinionPara[j].opinionText;
+                answer.opinionPic = defaultLevelData.opinionPara[j].opinionPic;
+                answerArr.push(answer);
+            }
 
+            gameData.answer = answerArr;
             EditorManager.editorData.GameData.push(gameData);
         }
     }

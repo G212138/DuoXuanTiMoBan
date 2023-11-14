@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_fnagdajing",
+    "texture": "77006cff-bad8-41de-bb0a-615c4ef6115b",
+    "atlas": "",
+    "rect": [
+      7,
+      10,
+      95,
+      109
+    ],
+    "offset": [
+      1.5,
+      -0.5
+    ],
+    "originalSize": [
+      106,
+      128
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

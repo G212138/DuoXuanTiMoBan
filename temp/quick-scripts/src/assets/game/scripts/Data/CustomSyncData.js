@@ -13,10 +13,9 @@ var CustomSyncData = /** @class */ (function () {
     function CustomSyncData() {
         this.curLevel = 0; // 当前关卡(第一关为0)
         // TODO 自定义
-        this.isStart = false; // 是否开始游戏
-        this.tureLevel = []; // 回答正确的关卡
-        this.curAni = "BG"; // 当前动画
-        this.aniLoop = false; // 动画是否循环
+        //已选中的选项
+        this.seletedOption = [];
+        this.rightTimu = [false, false, false, false, false, false, false, false];
     }
     return CustomSyncData;
 }());

@@ -48,7 +48,7 @@ var GamePanel = /** @class */ (function (_super) {
             this.answerRight(true);
         }
         else {
-            this.answerWrong();
+            this.answerWrong(true);
         }
     };
     /**
@@ -98,8 +98,8 @@ var GamePanel = /** @class */ (function (_super) {
     GamePanel.prototype.onReplay = function () {
         _super.prototype.onReplay.call(this);
         SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel = 0;
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.isStart = false;
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.tureLevel = [];
+        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption = [];
+        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.rightTimu = [false, false, false, false, false, false, false, false];
         ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_REPLAY);
     };
     GamePanel.prototype.update = function (dt) {

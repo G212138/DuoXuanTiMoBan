@@ -18,10 +18,7 @@ var EventType;
     EventType["SUBMIT"] = "SUBMIT";
     EventType["GAME_REPLAY"] = "GAME_REPLAY";
     EventType["CLICK_OPTION"] = "CLICK_OPTION";
-    EventType["CHANGE_ANI"] = "CHANGE_ANI";
     EventType["NEXT_LEVEL"] = "NEXT_LEVEL";
-    EventType["SHOW_QUESTION"] = "SHOW_QUESTION";
-    EventType["SYNC_GAME_OVER"] = "SYNC_GAME_OVER";
 })(EventType = exports.EventType || (exports.EventType = {}));
 
 cc._RF.pop();

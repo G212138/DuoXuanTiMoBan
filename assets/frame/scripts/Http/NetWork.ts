@@ -12,6 +12,11 @@ export class NetWorkClass {
     public readonly BASE = this.isOnlineEnv
         ? 'https://courseware-online.speiyou.com'
         : 'https://ceshi-courseware.speiyou.com';
+    // public readonly BASE = this.isOnlineEnv ? 'https://courseware-online.saasp.vdyoo.com' : 'https://ceshi-courseware-online.saasp.vdyoo.com';
+    // public readonly COS_URL = this.isOnlineEnv ?
+    //     'https://classroom-api-online.saasp.vdyoo.com/micro-class/storage/v1/tencent/sts'
+    //     : 'https://test-class-api-online.saasp.vdyoo.com/micro-class/storage/v1/tencent/sts';
+    // public readonly COS_BASE_URL = this.isOnlineEnv ? 'https://micro-class.xuepeiyou.com/' : 'https://micro-class-test.xuepeiyou.com/';
 
     public readonly GET_QUESTION = this.BASE + '/get';
     public readonly GET_USER_PROGRESS = this.BASE + '/get/answer';

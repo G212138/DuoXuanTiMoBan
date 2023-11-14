@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_yusan",
+    "texture": "6154aec5-e15b-444f-85bd-8e9a6a2135c7",
+    "atlas": "",
+    "rect": [
+      26,
+      7,
+      147,
+      300
+    ],
+    "offset": [
+      3.5,
+      3.5
+    ],
+    "originalSize": [
+      192,
+      321
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

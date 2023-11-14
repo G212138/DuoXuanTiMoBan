@@ -25,7 +25,7 @@ export default class GamePanel extends BaseGamePanel {
         if (isRight) {
             this.answerRight(true);
         } else {
-            this.answerWrong();
+            this.answerWrong(true);
         }
     }
 
@@ -80,8 +80,8 @@ export default class GamePanel extends BaseGamePanel {
     protected onReplay() {
         super.onReplay();
         SyncDataManager.getSyncData().customSyncData.curLevel = 0;
-        SyncDataManager.getSyncData().customSyncData.isStart = false;
-        SyncDataManager.getSyncData().customSyncData.tureLevel = [];
+        SyncDataManager.getSyncData().customSyncData.seletedOption = [];
+        SyncDataManager.getSyncData().customSyncData.rightTimu = [false,false,false,false,false,false,false,false];
         ListenerManager.dispatch(EventType.GAME_REPLAY);
     }
 

@@ -5,7 +5,7 @@ cc._RF.push(module, '64363RgvXdCJJdpexRQv89P', 'EditorManager');
 "use strict";
 /**编辑器数据类 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EditorManager = exports.GameData = void 0;
+exports.EditorManager = exports.opinionPara = exports.GameData = void 0;
 /**
  * 编辑器数据，根据游戏自定义内部数据
  */
@@ -35,22 +35,22 @@ var GameData = /** @class */ (function () {
         this.id = 0; //唯一编号，同时根据id的数量，取得题目数量
         this.questionText = ""; //题干文本，可编辑文字，最多30个字，如果为空就隐藏题干区域；
         this.questionPic = ""; //中央题版配图，图片文件的分辨率固定；
-        this.opinion = 0; //选项数量，数量为2~5个
-        this.answer = 1; //正确答案1~5，只能为单数，分别从左往右对应；
-        this.opinionText1 = ""; //选项1的文本，最多10个字
-        this.opinionPic1 = ""; //选项1的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片
-        this.opinionText2 = ""; //选项2的文本，最多10个字
-        this.opinionPic2 = ""; //选项2的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片
-        this.opinionText3 = ""; //选项3的文本，最多10个字
-        this.opinionPic3 = ""; //选项3的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片
-        this.opinionText4 = ""; //选项4的文本，最多10个字
-        this.opinionPic4 = ""; //选项4的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片
-        this.opinionText5 = ""; //选项5的文本，最多10个字
-        this.opinionPic5 = ""; //选项5的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片
+        this.opinion = 0; //选项数量，数量为2~8个
+        this.answerId = []; //正确答案的id；
+        this.answer = []; //多个正确答案的id；
     }
     return GameData;
 }());
 exports.GameData = GameData;
+var opinionPara = /** @class */ (function () {
+    function opinionPara() {
+        this.id = 0; //选项id
+        this.opinionText = ""; //选项的文本，最多10个字；
+        this.opinionPic = ""; //选项的图片，总选项的数量会影响分辨率的尺寸，当同时配置了文本和图片时，只显示图片；
+    }
+    return opinionPara;
+}());
+exports.opinionPara = opinionPara;
 var EditorManagerClass = /** @class */ (function () {
     function EditorManagerClass() {
         /** 编辑器数据 */

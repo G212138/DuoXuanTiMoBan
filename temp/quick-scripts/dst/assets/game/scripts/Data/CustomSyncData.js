@@ -24,10 +24,9 @@ var CustomSyncData = /** @class */ (function () {
     function CustomSyncData() {
         this.curLevel = 0; // 当前关卡(第一关为0)
         // TODO 自定义
-        this.isStart = false; // 是否开始游戏
-        this.tureLevel = []; // 回答正确的关卡
-        this.curAni = "BG"; // 当前动画
-        this.aniLoop = false; // 动画是否循环
+        //已选中的选项
+        this.seletedOption = [];
+        this.rightTimu = [false, false, false, false, false, false, false, false];
     }
     return CustomSyncData;
 }());
@@ -44,4 +43,4 @@ cc._RF.pop();
                         });
                     }
                 })();
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFzc2V0c1xcZ2FtZVxcc2NyaXB0c1xcRGF0YVxcQ3VzdG9tU3luY0RhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7OztHQUdHO0FBQ0g7SUFBQTtRQUNXLGFBQVEsR0FBVyxDQUFDLENBQUMsQ0FBQyxjQUFjO1FBQzNDLFdBQVc7UUFFSixZQUFPLEdBQVksS0FBSyxDQUFDLENBQUMsU0FBUztRQUNuQyxjQUFTLEdBQWEsRUFBRSxDQUFDLENBQUMsVUFBVTtRQUNwQyxXQUFNLEdBQVcsSUFBSSxDQUFDLENBQUMsT0FBTztRQUM5QixZQUFPLEdBQVksS0FBSyxDQUFDLENBQUMsU0FBUztJQUM5QyxDQUFDO0lBQUQscUJBQUM7QUFBRCxDQVJBLEFBUUMsSUFBQTtBQVJZLHdDQUFjIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIvIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiDpnIDopoHlkIzmraXnmoToh6rlrprkuYnmlbDmja5cbiAqIOa4uOaIj+S4muWKoeWxguWQjOatpeaVsOaNruWcqOi/memHjOa3u+WKoFxuICovXG5leHBvcnQgY2xhc3MgQ3VzdG9tU3luY0RhdGEge1xuICAgIHB1YmxpYyBjdXJMZXZlbDogbnVtYmVyID0gMDsgLy8g5b2T5YmN5YWz5Y2hKOesrOS4gOWFs+S4ujApXG4gICAgLy8gVE9ETyDoh6rlrprkuYlcblxuICAgIHB1YmxpYyBpc1N0YXJ0OiBib29sZWFuID0gZmFsc2U7IC8vIOaYr+WQpuW8gOWni+a4uOaIj1xuICAgIHB1YmxpYyB0dXJlTGV2ZWw6IG51bWJlcltdID0gW107IC8vIOWbnuetlOato+ehrueahOWFs+WNoVxuICAgIHB1YmxpYyBjdXJBbmk6IHN0cmluZyA9IFwiQkdcIjsgLy8g5b2T5YmN5Yqo55S7XG4gICAgcHVibGljIGFuaUxvb3A6IGJvb2xlYW4gPSBmYWxzZTsgLy8g5Yqo55S75piv5ZCm5b6q546vXG59XG4iXX0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFzc2V0c1xcZ2FtZVxcc2NyaXB0c1xcRGF0YVxcQ3VzdG9tU3luY0RhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7OztHQUdHO0FBQ0g7SUFBQTtRQUNXLGFBQVEsR0FBVyxDQUFDLENBQUMsQ0FBQyxjQUFjO1FBQzNDLFdBQVc7UUFDWCxRQUFRO1FBQ0Qsa0JBQWEsR0FBYyxFQUFFLENBQUM7UUFDOUIsY0FBUyxHQUFlLENBQUMsS0FBSyxFQUFDLEtBQUssRUFBQyxLQUFLLEVBQUMsS0FBSyxFQUFDLEtBQUssRUFBQyxLQUFLLEVBQUMsS0FBSyxFQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ3JGLENBQUM7SUFBRCxxQkFBQztBQUFELENBTkEsQUFNQyxJQUFBO0FBTlksd0NBQWMiLCJmaWxlIjoiIiwic291cmNlUm9vdCI6Ii8iLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIOmcgOimgeWQjOatpeeahOiHquWumuS5ieaVsOaNrlxuICog5ri45oiP5Lia5Yqh5bGC5ZCM5q2l5pWw5o2u5Zyo6L+Z6YeM5re75YqgXG4gKi9cbmV4cG9ydCBjbGFzcyBDdXN0b21TeW5jRGF0YSB7XG4gICAgcHVibGljIGN1ckxldmVsOiBudW1iZXIgPSAwOyAvLyDlvZPliY3lhbPljaEo56ys5LiA5YWz5Li6MClcbiAgICAvLyBUT0RPIOiHquWumuS5iVxuICAgIC8v5bey6YCJ5Lit55qE6YCJ6aG5XG4gICAgcHVibGljIHNlbGV0ZWRPcHRpb24gOiBudW1iZXJbXSA9IFtdO1xuICAgIHB1YmxpYyByaWdodFRpbXUgOiBib29sZWFuW10gPSBbZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2UsZmFsc2VdO1xufVxuIl19

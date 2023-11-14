@@ -15,69 +15,71 @@ var ConstValue = /** @class */ (function () {
     ConstValue.Subject = 1; //学科（1理科 2语文 3英语）
     ConstValue.defaultLevelData = [
         {
-            questionText: "以下哪位是唐朝诗人?",
+            id: 0,
+            questionText: "测试题1：下面哪些是单数?",
             questionPic: "",
-            opinion: 4,
-            answer: 4,
-            opinionText1: "屈原",
-            opinionPic1: "",
-            opinionText2: "李伯",
-            opinionPic2: "",
-            opinionText3: "唐国强",
-            opinionPic3: "",
-            opinionText4: "骆宾王",
-            opinionPic4: "",
-            opinionText5: "",
-            opinionPic5: "",
+            opinion: 8,
+            answer: [1, 3, 5, 7],
+            opinionPara: [
+                {
+                    opinionText: "1",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "2",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "3",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "4",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "5",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "6",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "7",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "8",
+                    opinionPic: "",
+                },
+            ]
         },
         {
-            questionText: "在课堂里学习30秒,就等于在现实中过了半分钟。",
-            questionPic: "",
-            opinion: 2,
-            answer: 2,
-            opinionText1: "错",
-            opinionPic1: "",
-            opinionText2: "对",
-            opinionPic2: "",
-            opinionText3: "",
-            opinionPic3: "",
-            opinionText4: "",
-            opinionPic4: "",
-            opinionText5: "",
-            opinionPic5: "",
-        },
-        {
-            questionText: "Ledu let me happy (    )",
-            questionPic: "",
+            id: 1,
+            questionText: "测试题2：下面哪些是图片?",
+            questionPic: "btn-hou2",
             opinion: 4,
-            answer: 3,
-            opinionText1: "playing",
-            opinionPic1: "",
-            opinionText2: "reading",
-            opinionPic2: "",
-            opinionText3: "studying",
-            opinionPic3: "",
-            opinionText4: "sleeping",
-            opinionPic4: "",
-            opinionText5: "",
-            opinionPic5: "",
-        },
-        {
-            questionText: "在组织幼儿认识形状时,李老师说:“请小朋友找找教室里有圆形和正方形的物品。”李老师的做法体现了幼儿教育特点的(   )",
-            questionPic: "",
-            opinion: 4,
-            answer: 4,
-            opinionText1: "基础性",
-            opinionPic1: "",
-            opinionText2: "整体性",
-            opinionPic2: "",
-            opinionText3: "浅显性",
-            opinionPic3: "",
-            opinionText4: "生活性",
-            opinionPic4: "",
-            opinionText5: "",
-            opinionPic5: "",
-        },
+            answer: [1, 3],
+            opinionPara: [
+                {
+                    opinionText: "1",
+                    opinionPic: "img_xiangpi",
+                },
+                {
+                    opinionText: "2",
+                    opinionPic: "",
+                },
+                {
+                    opinionText: "3",
+                    opinionPic: "img_fnagdajing",
+                },
+                {
+                    opinionText: "4",
+                    opinionPic: "",
+                }
+            ]
+        }
     ];
     return ConstValue;
 }());

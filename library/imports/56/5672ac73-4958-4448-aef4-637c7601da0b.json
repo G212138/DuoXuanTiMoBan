@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_wutaipingmu",
+    "texture": "9ba31375-97ba-4f0e-b6fa-1877850daa3d",
+    "atlas": "",
+    "rect": [
+      0,
+      1,
+      228,
+      236
+    ],
+    "offset": [
+      0,
+      -0.5
+    ],
+    "originalSize": [
+      228,
+      237
+    ],
+    "capInsets": [
+      41,
+      34.5,
+      42,
+      43.5
+    ]
+  }
+}

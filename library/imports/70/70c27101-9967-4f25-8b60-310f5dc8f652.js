@@ -54,7 +54,6 @@ var TeacherPanel = /** @class */ (function (_super) {
         if (this._btn_save) {
             this._btn_save.active = !isEdit;
         }
-        // this._btn_save.active = true;
     };
     /**
      * 设置界面（这里已经拿到了网络请求数据）
@@ -66,23 +65,22 @@ var TeacherPanel = /** @class */ (function (_super) {
         this.toggle_titleAudio.toggleItems[EditorManager_1.EditorManager.editorData.isPlayTitle ? 0 : 1].isChecked = true;
         //先默认设置几题题目
         EditorManager_1.EditorManager.editorData.GameData = [];
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 2; i++) {
             var gameData = new EditorManager_1.GameData();
             var defaultLevelData = ConstValue_1.ConstValue.defaultLevelData[i];
             gameData.questionText = defaultLevelData.questionText;
             gameData.questionPic = defaultLevelData.questionPic;
             gameData.opinion = defaultLevelData.opinion;
-            gameData.answer = defaultLevelData.answer;
-            gameData.opinionText1 = defaultLevelData.opinionText1;
-            gameData.opinionPic1 = defaultLevelData.opinionPic1;
-            gameData.opinionText2 = defaultLevelData.opinionText2;
-            gameData.opinionPic2 = defaultLevelData.opinionPic2;
-            gameData.opinionText3 = defaultLevelData.opinionText3;
-            gameData.opinionPic3 = defaultLevelData.opinionPic3;
-            gameData.opinionText4 = defaultLevelData.opinionText4;
-            gameData.opinionPic4 = defaultLevelData.opinionPic4;
-            gameData.opinionText5 = defaultLevelData.opinionText5;
-            gameData.opinionPic5 = defaultLevelData.opinionPic5;
+            gameData.answerId = defaultLevelData.answer;
+            var answerArr = [];
+            for (var j = 0; j < defaultLevelData.opinion; j++) {
+                var answer = new EditorManager_1.opinionPara();
+                answer.id = j;
+                answer.opinionText = defaultLevelData.opinionPara[j].opinionText;
+                answer.opinionPic = defaultLevelData.opinionPara[j].opinionPic;
+                answerArr.push(answer);
+            }
+            gameData.answer = answerArr;
             EditorManager_1.EditorManager.editorData.GameData.push(gameData);
         }
     };

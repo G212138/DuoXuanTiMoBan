@@ -32,28 +32,25 @@ var Tools_1 = require("../../../../frame/scripts/Utils/Tools");
 var UIHelp_1 = require("../../../../frame/scripts/Utils/UIHelp");
 var EventType_1 = require("../../Data/EventType");
 var EditorManager_1 = require("../../Manager/EditorManager");
-var OptionKuang_1 = require("./OptionKuang");
+var OptionNode_1 = require("./OptionNode");
 var SoundConfig_1 = require("./SoundConfig");
 var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
 var GameUI = /** @class */ (function (_super) {
     __extends(GameUI, _super);
     function GameUI() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.bg_ani = null;
-        _this.btn_start = null;
-        _this.question_node = null;
-        _this.option_node = null;
+        _this.option_panel = null;
         _this.option_prefab = null;
-        _this.title_text = null;
+        _this.question_lbl = null;
         _this.question_img = null;
-        _this.question_text = null;
-        _this.lb_curLevel = null;
-        _this.lb_levelCount = null;
+        _this.jiangbei = null;
+        _this.title_lbl = null;
+        _this.curLevel_lbl = null;
+        _this.levelCount_lbl = null;
+        _this.endLayer = null;
+        _this.jiangbei_prefab = null;
+        _this.zhadan_prefab = null;
         _this.gameData = null;
-        _this.question_node_start_posY = 900;
-        _this.question_node_posY = 90;
-        _this.option_node_start_posY = -1000;
-        _this.option_node_posY = -400;
         return _this;
     }
     GameUI.prototype.onLoad = function () {
@@ -61,259 +58,279 @@ var GameUI = /** @class */ (function (_super) {
         ListenerManager_1.ListenerManager.on(EventType_1.EventType.GAME_RECONNECT, this.resetUI, this);
         ListenerManager_1.ListenerManager.on(EventType_1.EventType.GAME_REPLAY, this.handleEnterGame, this);
         ListenerManager_1.ListenerManager.on(EventType_1.EventType.CLICK_OPTION, this.handleClickOption, this);
-        T2M_1.T2M.addSyncEventListener(EventType_1.EventType.CHANGE_ANI, this.T2M_changeAni.bind(this));
         T2M_1.T2M.addSyncEventListener(EventType_1.EventType.NEXT_LEVEL, this.nextLevel.bind(this));
-        T2M_1.T2M.addSyncEventListener(EventType_1.EventType.SHOW_QUESTION, this.handleShowQuestion.bind(this));
-        T2M_1.T2M.addSyncEventListener(EventType_1.EventType.SYNC_GAME_OVER, this.syncGameOver.bind(this));
     };
     GameUI.prototype.onDestroy = function () {
         ListenerManager_1.ListenerManager.off(EventType_1.EventType.ENTER_GAME, this.handleEnterGame, this);
         ListenerManager_1.ListenerManager.off(EventType_1.EventType.GAME_RECONNECT, this.resetUI, this);
         ListenerManager_1.ListenerManager.off(EventType_1.EventType.GAME_REPLAY, this.handleEnterGame, this);
         ListenerManager_1.ListenerManager.off(EventType_1.EventType.CLICK_OPTION, this.handleClickOption, this);
-        T2M_1.T2M.removeSyncEventListener(EventType_1.EventType.CHANGE_ANI);
         T2M_1.T2M.removeSyncEventListener(EventType_1.EventType.NEXT_LEVEL);
-        T2M_1.T2M.removeSyncEventListener(EventType_1.EventType.SHOW_QUESTION);
-        T2M_1.T2M.removeSyncEventListener(EventType_1.EventType.SYNC_GAME_OVER);
     };
     GameUI.prototype.handleEnterGame = function () {
-        Tools_1.Tools.playSpine(this.bg_ani, "BG", true);
         this.gameData = EditorManager_1.EditorManager.editorData.GameData[SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel];
         this.initUI();
     };
     GameUI.prototype.initUI = function () {
         var _this = this;
-        console.log("initUI", this.gameData);
-        this.initTitle();
-        this.initLevelProgress();
-        this.initQuestion();
-        this.initOption();
-        this.btn_start.active = true;
-        this.btn_start.opacity = 0;
-        this.question_node.y = this.question_node_start_posY;
-        this.option_node.y = this.option_node_start_posY;
-        Tools_1.Tools.playSpine(this.bg_ani, "BG1-1", true);
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG1-1";
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = true;
-        //播放皮皮语音：“别跑！”
-        SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["别跑"], false, false, false, function () {
-            cc.tween(_this.btn_start).to(0.5, { opacity: 255 }).start();
-        });
-    };
-    GameUI.prototype.resetUI = function () {
         this.gameData = EditorManager_1.EditorManager.editorData.GameData[SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel];
-        this.initTitle();
-        this.initLevelProgress();
-        this.initQuestion();
-        this.initOption();
-        this.btn_start.active = !SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.isStart;
-        Tools_1.Tools.playSpine(this.bg_ani, SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni, SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop);
-        if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.isStart) {
-            this.question_node.y = this.question_node_posY;
-            this.option_node.y = this.option_node_posY;
-            this.question_node.getChildByName("qie").x = 430;
-        }
-        if (SyncDataManager_1.SyncDataManager.syncData.frameSyncData.isGameOver) {
-            this.question_node.y = this.question_node_start_posY;
-            this.option_node.y = this.option_node_start_posY;
-            this.question_node.getChildByName("qie").x = 300;
-        }
-    };
-    GameUI.prototype.nextLevel = function () {
-        this.gameData = EditorManager_1.EditorManager.editorData.GameData[SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel];
-        this.initTitle();
-        this.initLevelProgress();
-        this.initQuestion();
-        this.initOption();
-        this.handleShowQuestion();
-    };
-    GameUI.prototype.initTitle = function () {
-        this.title_text.string = this.gameData.questionText;
-        if (this.gameData.questionText.length > 36) {
-            this.title_text.node.width = this.title_text.fontSize * 36;
-            this.title_text.overflow = cc.Label.Overflow.RESIZE_HEIGHT;
-        }
-        else {
-            this.title_text.overflow = cc.Label.Overflow.NONE;
-        }
-        this.title_text.node.active = false;
-        this.title_text.string = this.gameData.questionText;
-        this.title_text.node.active = true;
-        this.title_text.node.parent.getComponent(cc.Layout).updateLayout();
-    };
-    GameUI.prototype.initLevelProgress = function () {
-        this.lb_curLevel.node.parent.parent.active = EditorManager_1.EditorManager.editorData.GameData.length > 1;
-        this.lb_curLevel.string = (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel + 1).toString();
-        this.lb_levelCount.string = EditorManager_1.EditorManager.editorData.GameData.length.toString();
-    };
-    GameUI.prototype.initQuestion = function () {
-        this.question_text.string = this.gameData.questionText;
-    };
-    GameUI.prototype.initOption = function () {
-        this.option_node.destroyAllChildren();
-        this.option_node.removeAllChildren();
+        UIHelp_1.UIHelp.showMask();
+        this.node.getChildByName("btn_check").active = false;
+        this.node.getChildByName("btn_check").opacity = 0;
+        this.node.getChildByName("btn_check").getChildByName("btn_disable").active = false;
+        this.jiangbei.opacity = 0;
+        this.jiangbei.scale = 0;
+        this.jiangbei.active = false;
+        this.node.getChildByName("pipi_yanwu").active = false;
+        this.endLayer.active = false;
+        this.option_panel.removeAllChildren();
+        this.option_panel.destroyAllChildren();
         for (var i = 0; i < this.gameData.opinion; i++) {
             var option = cc.instantiate(this.option_prefab);
-            option.name = "option" + i;
-            option.parent = this.option_node;
-            var com = option.getComponent(OptionKuang_1.default);
-            var isTrueAnswer = this.gameData.answer == i + 1;
-            com.init(i, this.gameData["opinionText" + (i + 1)], this.gameData["opinionPic" + (i + 1)], isTrueAnswer);
+            option.parent = this.option_panel;
+            option.name = "option_" + i;
+            option.getComponent(OptionNode_1.default).showInit(i);
+        }
+        var panel_width = this.gameData.opinion * 290 + (this.gameData.opinion - 1) * 30;
+        if (panel_width > 1800) {
+            this.option_panel.scale = 1800 / panel_width;
+        }
+        this.scheduleOnce(function () {
+            _this.showQuestion();
+            _this.node.getChildByName("btn_check").active = true;
+            _this.node.getChildByName("btn_check").getChildByName("btn_disable").active = true;
+        }, 1);
+        cc.tween(this.node.getChildByName("btn_check")).delay(1.5).to(0.5, { opacity: 255 }).call(function () {
+            UIHelp_1.UIHelp.closeMask();
+        }).start();
+        this.initTitle();
+        this.initLevelProgress();
+    };
+    GameUI.prototype.initLevelProgress = function () {
+        this.curLevel_lbl.node.parent.parent.active = EditorManager_1.EditorManager.editorData.GameData.length > 1;
+        this.curLevel_lbl.string = (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel + 1).toString();
+        this.levelCount_lbl.string = EditorManager_1.EditorManager.editorData.GameData.length.toString();
+    };
+    GameUI.prototype.initTitle = function () {
+        this.title_lbl.string = this.gameData.questionText;
+        if (this.gameData.questionText.length > 36) {
+            this.title_lbl.node.width = this.title_lbl.fontSize * 36;
+            this.title_lbl.overflow = cc.Label.Overflow.RESIZE_HEIGHT;
+        }
+        else {
+            this.title_lbl.overflow = cc.Label.Overflow.NONE;
+        }
+        this.title_lbl.node.active = false;
+        this.title_lbl.string = this.gameData.questionText;
+        this.title_lbl.node.active = true;
+        this.title_lbl.node.parent.getComponent(cc.Layout).updateLayout();
+    };
+    GameUI.prototype.resetUI = function () {
+        this.initUI();
+        this.handleOptionState();
+        this.handleCheckBtnState();
+        if (SyncDataManager_1.SyncDataManager.getSyncData().frameSyncData.isGameOver) {
+            for (var i = 0; i < this.option_panel.childrenCount; i++) {
+                var option = this.option_panel.children[i];
+                option.active = false;
+            }
+            for (var i = 0; i < this.node.getChildByName("img_wutaipingmu").childrenCount; i++) {
+                var timu = this.node.getChildByName("img_wutaipingmu").children[i];
+                timu.opacity = 0;
+            }
+        }
+    };
+    GameUI.prototype.showQuestion = function () {
+        if (this.gameData.questionPic == "") {
+            this.question_lbl.node.active = true;
+            this.question_img.node.active = false;
+            this.question_lbl.string = this.gameData.questionText;
+            cc.tween(this.question_lbl.node).delay(0.5).to(0.3, { opacity: 255 }).start();
+        }
+        else {
+            this.question_lbl.node.active = false;
+            this.question_img.node.active = true;
+            cc.tween(this.question_img.node).delay(0.5).to(0.3, { opacity: 255 }).start();
+            cc.resources.load("images/" + this.gameData.questionPic, cc.SpriteFrame, function (err, img) {
+                this.question_img.spriteFrame = img;
+            }.bind(this));
         }
     };
     GameUI.prototype.handleClickOption = function (data) {
-        var _this = this;
-        ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.SUBMIT, data);
-        cc.tween(this.question_node.getChildByName("qie")).to(0.5, { x: 300 }).call(function () {
-            if (data) {
-                _this.handleTrueAni();
+        var seletedOption = SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption;
+        if (seletedOption.indexOf(data) != -1) {
+            seletedOption.splice(seletedOption.indexOf(data), 1);
+        }
+        else {
+            seletedOption.push(data);
+        }
+        this.handleOptionState();
+        this.handleCheckBtnState();
+    };
+    GameUI.prototype.handleOptionState = function () {
+        for (var i = 0; i < this.option_panel.childrenCount; i++) {
+            var option = this.option_panel.children[i];
+            option.getComponent(OptionNode_1.default).option_check.active = false;
+        }
+        for (var i = 0; i < SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption.length; i++) {
+            var option = this.option_panel.getChildByName("option_" + SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption[i]);
+            option.getComponent(OptionNode_1.default).option_check.active = true;
+        }
+    };
+    GameUI.prototype.handleCheckBtnState = function () {
+        var btn_check = this.node.getChildByName("btn_check");
+        var btn_mask = btn_check.getChildByName("btn_disable");
+        btn_mask.active = SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption.length < 1;
+    };
+    GameUI.prototype.onClickCheckBtn = function () {
+        SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["点击音效"], false, false);
+        UIHelp_1.UIHelp.showMask();
+        //判断答案是否正确
+        if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption.length != this.gameData.answerId.length) {
+            // console.log("答案错误");
+            this.handleFalse();
+        }
+        else {
+            var isTrue = true;
+            for (var i = 0; i < SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption.length; i++) {
+                if (this.gameData.answerId.indexOf(SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption[i] + 1) == -1) {
+                    isTrue = false;
+                    break;
+                }
+            }
+            if (isTrue) {
+                // console.log("答案正确");
+                this.handleTrue();
             }
             else {
-                _this.handleWrongAni();
+                // console.log("答案错误");
+                this.handleFalse();
             }
-        }).start();
+        }
     };
-    GameUI.prototype.handleTrueAni = function () {
+    GameUI.prototype.handleTrue = function () {
         var _this = this;
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.tureLevel.push(SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel + 1);
-        cc.tween(this.question_node).delay(0.5).to(0.5, { y: this.question_node_start_posY }).start();
-        cc.tween(this.option_node).delay(0.5).to(0.5, { y: this.option_node_start_posY }).call(function () {
-            _this.handleNextLevel();
-        }).start();
+        ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.SUBMIT, true);
+        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.rightTimu[SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel] = true;
+        for (var i = 0; i < this.node.getChildByName("img_wutaipingmu").childrenCount; i++) {
+            var timu = this.node.getChildByName("img_wutaipingmu").children[i];
+            cc.tween(timu).to(0.5, { opacity: 0 }).start();
+        }
+        for (var i = 0; i < this.option_panel.childrenCount; i++) {
+            var option = this.option_panel.children[i];
+            option.getComponent(OptionNode_1.default).showTrue();
+        }
+        this.jiangbei.opacity = 0;
+        this.jiangbei.active = true;
+        this.scheduleOnce(function () {
+            cc.tween(_this.jiangbei).to(0.5, { opacity: 255, scale: 1 }).start();
+            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["快节奏成功音效"], false, false, false, function () {
+                if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
+                    T2M_1.T2M.dispatch(EventType_1.EventType.NEXT_LEVEL, true);
+                }
+                // this.nextLevel();
+            });
+        }, 3);
     };
-    GameUI.prototype.handleWrongAni = function () {
+    GameUI.prototype.handleFalse = function () {
         var _this = this;
-        cc.tween(this.question_node).delay(0.5).to(0.5, { y: this.question_node_start_posY }).start();
-        cc.tween(this.option_node).delay(0.5).to(0.5, { y: this.option_node_start_posY }).call(function () {
-            _this.handleNextLevel(false);
-        }).start();
+        ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.SUBMIT, false);
+        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.rightTimu[SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel] = false;
+        for (var i = 0; i < this.node.getChildByName("img_wutaipingmu").childrenCount; i++) {
+            var timu = this.node.getChildByName("img_wutaipingmu").children[i];
+            cc.tween(timu).to(0.5, { opacity: 0 }).start();
+        }
+        for (var i = 0; i < this.option_panel.childrenCount; i++) {
+            var option = this.option_panel.children[i];
+            var isSleted = SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption.indexOf(i) != -1;
+            option.getComponent(OptionNode_1.default).showFalse(isSleted);
+        }
+        this.scheduleOnce(function () {
+            _this.node.getChildByName("pipi_yanwu").active = true;
+            Tools_1.Tools.playSpine(_this.node.getChildByName("pipi_yanwu").getComponent(sp.Skeleton), 'effect_smoke1', false, function () {
+                _this.node.getChildByName("pipi_yanwu").active = false;
+                // this.nextLevel();
+                if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
+                    T2M_1.T2M.dispatch(EventType_1.EventType.NEXT_LEVEL, true);
+                }
+            });
+        }, 2.5);
     };
-    GameUI.prototype.handleNextLevel = function (isTrue) {
-        if (isTrue === void 0) { isTrue = true; }
-        var bg_ani_name = isTrue ? "BG3" : "BG4";
+    GameUI.prototype.nextLevel = function () {
+        this.jiangbei.active = false;
+        for (var i = 0; i < this.option_panel.childrenCount; i++) {
+            var option = this.option_panel.children[i];
+            option.active = false;
+        }
         if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel + 1 >= EditorManager_1.EditorManager.editorData.GameData.length) {
             this.handleGameOver();
         }
         else {
             SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curLevel++;
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = bg_ani_name;
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = false;
-            Tools_1.Tools.playSpine(this.bg_ani, bg_ani_name, false, function () {
-                if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                    T2M_1.T2M.dispatch(EventType_1.EventType.CHANGE_ANI, { name: "BG2", loop: true });
-                    T2M_1.T2M.dispatch(EventType_1.EventType.NEXT_LEVEL, null);
-                }
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG2";
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = true;
-                // Tools.playSpine(this.bg_ani, "BG2", true);
-                // this.nextLevel();
-            });
+            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.seletedOption = [];
+            this.initUI();
         }
-    };
-    GameUI.prototype.T2M_changeAni = function (data) {
-        Tools_1.Tools.playSpine(this.bg_ani, data.name, data.loop);
     };
     GameUI.prototype.handleGameOver = function () {
-        if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.tureLevel.length == EditorManager_1.EditorManager.editorData.GameData.length) {
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG3_win";
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = false;
-            Tools_1.Tools.playSpine(this.bg_ani, "BG3_win", false, function () {
-                if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                    T2M_1.T2M.dispatch(EventType_1.EventType.CHANGE_ANI, { name: "BG3_win2", loop: true });
-                    // T2M.dispatch(EventType.SYNC_GAME_OVER, null);
-                }
-                SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["快节奏成功音效"], false, false, false, function () {
-                    if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                        // T2M.dispatch(EventType.CHANGE_ANI, { name: "BG3_win2", loop: true });
-                        T2M_1.T2M.dispatch(EventType_1.EventType.SYNC_GAME_OVER, null);
-                    }
-                });
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG3_win2";
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = true;
-                // Tools.playSpine(this.bg_ani, "BG3_win2", true);
-                // ListenerManager.dispatch(EventType.GAME_OVER);
+        this.endLayer.active = true;
+        var isAllRight = true;
+        for (var i = 0; i < EditorManager_1.EditorManager.editorData.GameData.length; i++) {
+            if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.rightTimu[i]) {
+                var jiangbei = cc.instantiate(this.jiangbei_prefab);
+                jiangbei.parent = this.endLayer.getChildByName("panel");
+            }
+            else {
+                var zhadan = cc.instantiate(this.zhadan_prefab);
+                zhadan.parent = this.endLayer.getChildByName("panel");
+                isAllRight = false;
+            }
+        }
+        if (isAllRight) {
+            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["激烈的掌声欢呼音效"], false, false, false, function () {
+                ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
             });
+            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_happy_meidong', true);
         }
         else {
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG3&4_lost";
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = false;
-            Tools_1.Tools.playSpine(this.bg_ani, "BG3&4_lost", false, function () {
-                if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                    T2M_1.T2M.dispatch(EventType_1.EventType.CHANGE_ANI, { name: "BG3&4_lost2", loop: true });
-                    // T2M.dispatch(EventType.SYNC_GAME_OVER, null);
-                }
-                SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["长一些的失败音效"], false, false, false, function () {
-                    if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                        // T2M.dispatch(EventType.CHANGE_ANI, { name: "BG3_win2", loop: true });
-                        T2M_1.T2M.dispatch(EventType_1.EventType.SYNC_GAME_OVER, null);
-                    }
-                });
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG3&4_lost2";
-                SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = true;
-                // Tools.playSpine(this.bg_ani, "BG3&4_lost2", true);
-                // ListenerManager.dispatch(EventType.GAME_OVER);
+            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["稀稀拉拉的掌声音效"], false, false, false, function () {
+                ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
             });
+            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_embarrassed_meidong', true);
         }
     };
-    GameUI.prototype.syncGameOver = function () {
-        ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
-    };
-    GameUI.prototype.onClickStart = function () {
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.isStart = true;
-        SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["点击音效"], false, false, false);
-        this.btn_start.active = false;
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG1";
-        SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = false;
-        Tools_1.Tools.playSpine(this.bg_ani, "BG1", false, function () {
-            if (NetWork_1.NetWork.isMaster || !NetWork_1.NetWork.isSync) {
-                T2M_1.T2M.dispatch(EventType_1.EventType.CHANGE_ANI, { name: "BG2", loop: true });
-                T2M_1.T2M.dispatch(EventType_1.EventType.SHOW_QUESTION, null);
-            }
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.curAni = "BG2";
-            SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.aniLoop = true;
-            // Tools.playSpine(this.bg_ani, "BG2", true);
-            // this.handleShowQuestion();
-        });
-    };
-    GameUI.prototype.handleShowQuestion = function () {
-        var _this = this;
-        this.question_node.getChildByName("qie").x = 300;
-        cc.tween(this.question_node).to(0.5, { y: this.question_node_posY }).call(function () {
-            UIHelp_1.UIHelp.closeMask();
-            cc.tween(_this.question_node.getChildByName("qie")).to(0.5, { x: 430 }).start();
-        }).start();
-        cc.tween(this.option_node).to(0.5, { y: this.option_node_posY }).start();
-    };
-    __decorate([
-        property(sp.Skeleton)
-    ], GameUI.prototype, "bg_ani", void 0);
     __decorate([
         property(cc.Node)
-    ], GameUI.prototype, "btn_start", void 0);
-    __decorate([
-        property(cc.Node)
-    ], GameUI.prototype, "question_node", void 0);
-    __decorate([
-        property(cc.Node)
-    ], GameUI.prototype, "option_node", void 0);
+    ], GameUI.prototype, "option_panel", void 0);
     __decorate([
         property(cc.Prefab)
     ], GameUI.prototype, "option_prefab", void 0);
     __decorate([
         property(cc.Label)
-    ], GameUI.prototype, "title_text", void 0);
+    ], GameUI.prototype, "question_lbl", void 0);
     __decorate([
         property(cc.Sprite)
     ], GameUI.prototype, "question_img", void 0);
     __decorate([
-        property(cc.Label)
-    ], GameUI.prototype, "question_text", void 0);
+        property(cc.Node)
+    ], GameUI.prototype, "jiangbei", void 0);
     __decorate([
         property(cc.Label)
-    ], GameUI.prototype, "lb_curLevel", void 0);
+    ], GameUI.prototype, "title_lbl", void 0);
     __decorate([
         property(cc.Label)
-    ], GameUI.prototype, "lb_levelCount", void 0);
+    ], GameUI.prototype, "curLevel_lbl", void 0);
+    __decorate([
+        property(cc.Label)
+    ], GameUI.prototype, "levelCount_lbl", void 0);
+    __decorate([
+        property(cc.Node)
+    ], GameUI.prototype, "endLayer", void 0);
+    __decorate([
+        property(cc.Prefab)
+    ], GameUI.prototype, "jiangbei_prefab", void 0);
+    __decorate([
+        property(cc.Prefab)
+    ], GameUI.prototype, "zhadan_prefab", void 0);
     GameUI = __decorate([
         ccclass
     ], GameUI);

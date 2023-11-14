@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_xiangpi",
+    "texture": "dc5d9076-330a-4541-ae18-75b57f36a3b9",
+    "atlas": "",
+    "rect": [
+      7,
+      6,
+      66,
+      47
+    ],
+    "offset": [
+      0,
+      -2
+    ],
+    "originalSize": [
+      80,
+      55
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
