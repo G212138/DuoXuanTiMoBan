@@ -50,6 +50,7 @@ var GameUI = /** @class */ (function (_super) {
         _this.endLayer = null;
         _this.jiangbei_prefab = null;
         _this.zhadan_prefab = null;
+        _this.end_item_prefab = null;
         _this.gameData = null;
         return _this;
     }
@@ -122,7 +123,7 @@ var GameUI = /** @class */ (function (_super) {
         }
         this.title_lbl.node.active = false;
         this.title_lbl.string = this.gameData.questionText;
-        this.title_lbl.node.active = true;
+        this.title_lbl.node.active = this.gameData.questionPic == "" && this.gameData.questionText != "";
         this.title_lbl.node.parent.getComponent(cc.Layout).updateLayout();
     };
     GameUI.prototype.resetUI = function () {
@@ -230,7 +231,10 @@ var GameUI = /** @class */ (function (_super) {
                 }
                 // this.nextLevel();
             });
-        }, 3);
+        }, 2);
+        this.scheduleOnce(function () {
+            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["咻"], false, false, false);
+        }, 0.5);
     };
     GameUI.prototype.handleFalse = function () {
         var _this = this;
@@ -255,6 +259,9 @@ var GameUI = /** @class */ (function (_super) {
                 }
             });
         }, 2.5);
+        this.scheduleOnce(function () {
+            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["咻"], false, false, false);
+        }, 0.5);
     };
     GameUI.prototype.nextLevel = function () {
         this.jiangbei.active = false;
@@ -274,29 +281,39 @@ var GameUI = /** @class */ (function (_super) {
     GameUI.prototype.handleGameOver = function () {
         this.endLayer.active = true;
         var isAllRight = true;
+        this.endLayer.getChildByName("panel").removeAllChildren();
         for (var i = 0; i < EditorManager_1.EditorManager.editorData.GameData.length; i++) {
             if (SyncDataManager_1.SyncDataManager.getSyncData().customSyncData.rightTimu[i]) {
-                var jiangbei = cc.instantiate(this.jiangbei_prefab);
-                jiangbei.parent = this.endLayer.getChildByName("panel");
+                var end_item = cc.instantiate(this.end_item_prefab);
+                end_item.parent = this.endLayer.getChildByName("panel");
+                end_item.getChildByName("lbl").getComponent(cc.Label).string = "第" + (i + 1) + "题";
+                end_item.getChildByName("img_cuowu").active = false;
+                end_item.getChildByName("title").getComponent(cc.Label).string = "正确";
             }
             else {
-                var zhadan = cc.instantiate(this.zhadan_prefab);
-                zhadan.parent = this.endLayer.getChildByName("panel");
+                var end_item = cc.instantiate(this.end_item_prefab);
+                end_item.parent = this.endLayer.getChildByName("panel");
+                end_item.getChildByName("lbl").getComponent(cc.Label).string = "第" + (i + 1) + "题";
+                end_item.getChildByName("img_cuowu").active = true;
+                end_item.getChildByName("title").getComponent(cc.Label).string = "错误";
                 isAllRight = false;
             }
         }
         if (isAllRight) {
-            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["激烈的掌声欢呼音效"], false, false, false, function () {
-                ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
-            });
-            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_happy_meidong', true);
+            // SoundManager.playEffect(SoundConfig.soudlist["激烈的掌声欢呼音效"], false, false, false, () => {
+            // ListenerManager.dispatch(EventType.GAME_OVER);
+            // });
+            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_happy', true);
         }
         else {
-            SoundManager_1.SoundManager.playEffect(SoundConfig_1.SoundConfig.soudlist["稀稀拉拉的掌声音效"], false, false, false, function () {
-                ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
-            });
-            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_embarrassed_meidong', true);
+            // SoundManager.playEffect(SoundConfig.soudlist["稀稀拉拉的掌声音效"], false, false, false, () => {
+            // ListenerManager.dispatch(EventType.GAME_OVER);
+            // });
+            Tools_1.Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_embarrassed', true);
         }
+        this.scheduleOnce(function () {
+            ListenerManager_1.ListenerManager.dispatch(EventType_1.EventType.GAME_OVER);
+        }, 3);
     };
     __decorate([
         property(cc.Node)
@@ -331,6 +348,9 @@ var GameUI = /** @class */ (function (_super) {
     __decorate([
         property(cc.Prefab)
     ], GameUI.prototype, "zhadan_prefab", void 0);
+    __decorate([
+        property(cc.Prefab)
+    ], GameUI.prototype, "end_item_prefab", void 0);
     GameUI = __decorate([
         ccclass
     ], GameUI);

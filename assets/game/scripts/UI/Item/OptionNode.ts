@@ -31,16 +31,24 @@ export default class OptionNode extends cc.Component {
     private option_img: cc.Sprite = null;
     @property(cc.Node)
     public option_check: cc.Node = null;
-    
+    @property(cc.Sprite)
+    private icon: cc.Sprite = null;
+    @property(cc.Sprite)
+    private icon_1: cc.Sprite = null;
+    @property(cc.SpriteFrame)
+    private icon_img: cc.SpriteFrame[] = [];
+
     private optionIndex: number = 0;
     private gameData: GameData = null;
     private isTrue: boolean = false;
 
     public showInit(index: number) {
+        this.icon_1.node.active = false;
         this.gameData = EditorManager.editorData.GameData[SyncDataManager.getSyncData().customSyncData.curLevel];
         this.optionIndex = index;
         this.isTrue = this.gameData.answerId.indexOf(index + 1) != -1;
-
+        this.icon.spriteFrame = this.icon_img[index];
+        this.icon_1.spriteFrame = this.icon_img[index];
         this.node.scaleX = 0;
         for (let i = 0; i < this.node.childrenCount; i++) {
             this.node.children[i].active = false;
@@ -56,7 +64,8 @@ export default class OptionNode extends cc.Component {
                 this.option_node.active = true;
                 this.option_node.scaleX = 0;
                 cc.tween(this.option_node).to(0.3, { scaleX: 1 }).call(() => {
-
+                    this.icon_1.node.active = true;
+                    this.ani_pipi.node.active = false;
                 }).start();
             });
         }).start();
@@ -85,7 +94,8 @@ export default class OptionNode extends cc.Component {
 
     public showTrue() {
         if (this.isTrue) {
-            Tools.playSpine(this.ani_pipi, 'pipi_catch_meidong', true);
+            this.ani_pipi.node.active = true;
+            Tools.playSpine(this.ani_pipi, 'pipi_catch', true);
         } else {
             this.ani_pipi.node.active = false;
             this.img_wutaidong.active = true;
@@ -93,17 +103,23 @@ export default class OptionNode extends cc.Component {
         cc.tween(this.option_node).to(0.4, { scaleX: 0 }).call(() => {
             this.zhandan_node.active = true;
             if (this.isTrue) {
-                this.zhandan_node.getChildByName("img_zuanshi").x = -100;
-                cc.tween(this.zhandan_node.getChildByName("img_zuanshi")).to(1, { y: -460, angle: 360 }).call(() => { }).start();
+                this.zhandan_node.getChildByName("img_zuanshi").x = -90;
+                cc.tween(this.zhandan_node.getChildByName("img_zuanshi")).to(1, { y: -450, angle: 720 * 2 }).call(() => { }).start();
                 // Tools.playSpine(this.ani_pipi, 'pipi_happy_meidong', true);
             } else {
                 this.zhandan_node.getChildByName("img_zhadan").x = 0;
-                cc.tween(this.zhandan_node.getChildByName("img_zhadan")).to(1, { y: -650, angle: 360 }).delay(0.3).call(() => {
+                this.zhandan_node.getChildByName("img_zhadan").active = true;
+                cc.tween(this.zhandan_node.getChildByName("img_zhadan")).to(1, { y: -430, angle: 720 * 2 }).delay(0.3).call(() => {
+                    this.node.getChildByName("zhadan_boom").active = true;
+                    this.zhandan_node.getChildByName("img_dongzhong_zhadan").active = false;
+                    this.zhandan_node.getChildByName("img_zhadan").active = false;
+                    Tools.playSpine(this.node.getChildByName("zhadan_boom").getComponent(sp.Skeleton), 'effect_boom', false);
                     SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
-                    this.yanwu.node.active = true;
-                    Tools.playSpine(this.yanwu, 'dongli yanwu', false, () => {
-                        this.yanwu.node.active = false;
-                    });
+                    // SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
+                    // this.yanwu.node.active = true;
+                    // Tools.playSpine(this.yanwu, 'dongli yanwu', false, () => {
+                    //     this.yanwu.node.active = false;
+                    // });
                 }).start();
                 // this.ani_pipi.node.active = false;
                 // this.img_wutaidong.active = true;
@@ -113,7 +129,8 @@ export default class OptionNode extends cc.Component {
 
     public showFalse(isSleted: boolean) {
         if (isSleted) {
-            Tools.playSpine(this.ani_pipi, 'pipi_catch_meidong', true);
+            this.ani_pipi.node.active = true;
+            Tools.playSpine(this.ani_pipi, 'pipi_catch', true);
         } else {
             this.ani_pipi.node.active = false;
             this.img_wutaidong.active = true;
@@ -121,38 +138,54 @@ export default class OptionNode extends cc.Component {
         cc.tween(this.option_node).to(0.4, { scaleX: 0 }).call(() => {
             this.zhandan_node.active = true;
             if (this.isTrue) {
-                this.zhandan_node.getChildByName("img_zuanshi").x = isSleted ? -100 : 0;
+                this.zhandan_node.getChildByName("img_zuanshi").x = isSleted ? -90 : 0;
                 let endY = isSleted ? -460 : -650;
-                cc.tween(this.zhandan_node.getChildByName("img_zuanshi")).to(1, { y: endY, angle: 360 }).call(() => {
+                cc.tween(this.zhandan_node.getChildByName("img_zuanshi")).to(1, { y: -450, angle: 720 * 2 }).call(() => {
                     if (!isSleted) {
-                        cc.tween(this.zhandan_node.getChildByName("img_dongzhong_zhadan")).delay(1).bezierTo(0.5, cc.v2(0, -650), cc.v2(-50, 0), cc.v2(-100, -460)).call(() => {
-                            this.node.getChildByName("zhadan_boom").active = true;
-                            this.zhandan_node.getChildByName("img_dongzhong_zhadan").active = false;
-                            Tools.playSpine(this.node.getChildByName("zhadan_boom").getComponent(sp.Skeleton), 'effect_boom', false);
-                            SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
-                        }).start();
-                    }                    
-                 }).start();
-                Tools.playSpine(this.ani_pipi, 'pipi_happy_meidong', true);
-            } else {
-                Tools.playSpine(this.ani_pipi, 'pipi_embarrassed_meidong', true);
-                this.zhandan_node.getChildByName("img_zhadan").x = isSleted ? -100 : 0;
-                let endY = isSleted ? -460 : -650;
-                cc.tween(this.zhandan_node.getChildByName("img_zhadan")).to(1, { y: endY, angle: 360 }).delay(0.3).call(() => {
-                    if (!isSleted) {
-                        SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
-                        this.yanwu.node.active = true;
-                        Tools.playSpine(this.yanwu, 'dongli yanwu', false, () => {
-                            this.yanwu.node.active = false;
-                        });
-                    }                  
+                        // cc.tween(this.zhandan_node.getChildByName("img_dongzhong_zhadan")).delay(1).bezierTo(0.5, cc.v2(0, -650), cc.v2(-50, 0), cc.v2(-100, -460)).call(() => {
+                        // this.node.getChildByName("boom").active = true;
+                        // this.zhandan_node.getChildByName("img_dongzhong_zhadan").active = false;
+                        // Tools.playSpine(this.node.getChildByName("boom").getComponent(sp.Skeleton), 'effect_boom', false);
+                        // SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
+                        // }).start();
+                    }
                 }).start();
-                this.scheduleOnce(() => {
-                    this.zhandan_node.getChildByName("img_zhadan").active = false;
-                    SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
-                    this.node.getChildByName("zhadan_boom").active = true;
-                    Tools.playSpine(this.node.getChildByName("zhadan_boom").getComponent(sp.Skeleton), 'effect_boom', false);
-                }, 2.5);
+                Tools.playSpine(this.ani_pipi, 'pipi_happy', true);
+            } else {
+                Tools.playSpine(this.ani_pipi, 'pipi_embarrassed', true);
+                this.zhandan_node.getChildByName("img_zhadan").active = true;
+                this.zhandan_node.getChildByName("img_zhadan").x = isSleted ? -90 : 0;
+                let endY = isSleted ? -460 : -650;
+                cc.tween(this.zhandan_node.getChildByName("img_zhadan")).to(1, { y: -430, angle: 720 * 2 }).delay(0.3).call(() => {
+                    if (!isSleted) {
+                        this.zhandan_node.getChildByName("img_zhadan").active = false;
+                        this.node.getChildByName("boom").active = true;
+                        // this.zhandan_node.getChildByName("img_dongzhong_zhadan").active = false;
+                        Tools.playSpine(this.node.getChildByName("boom").getComponent(sp.Skeleton), 'effect_boom', false);
+                        SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false, (() => {
+                            this.node.getChildByName("boom").active = false;
+                        }));
+                        // SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
+                        // this.yanwu.node.active = true;
+                        // Tools.playSpine(this.yanwu, 'dongli yanwu', false, () => {
+                        //     this.yanwu.node.active = false;
+                        // });
+                    } else {
+                        this.zhandan_node.getChildByName("img_zhadan").active = false;
+                        this.node.getChildByName("zhadan_boom").active = true;
+                        // this.zhandan_node.getChildByName("img_dongzhong_zhadan").active = false;
+                        Tools.playSpine(this.node.getChildByName("zhadan_boom").getComponent(sp.Skeleton), 'effect_boom', false);
+                        SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false, (() => {
+                            this.node.getChildByName("zhadan_boom").active = false;
+                        }));
+                    }
+                }).start();
+                // this.scheduleOnce(() => {
+                //     this.zhandan_node.getChildByName("img_zhadan").active = false;
+                //     SoundManager.playEffect(SoundConfig.soudlist["爆炸音效"], false, false, false);
+                //     this.node.getChildByName("zhadan_boom").active = true;
+                //     Tools.playSpine(this.node.getChildByName("zhadan_boom").getComponent(sp.Skeleton), 'effect_boom', false);
+                // }, 2.5);
             }
         }).start();
     }

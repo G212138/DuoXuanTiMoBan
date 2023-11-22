@@ -38,6 +38,8 @@ export default class GameUI extends cc.Component {
     private jiangbei_prefab: cc.Prefab = null;
     @property(cc.Prefab)
     private zhadan_prefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    private end_item_prefab: cc.Prefab = null;
 
     private gameData: GameData = null;
 
@@ -116,7 +118,7 @@ export default class GameUI extends cc.Component {
         }
         this.title_lbl.node.active = false;
         this.title_lbl.string = this.gameData.questionText;
-        this.title_lbl.node.active = true;
+        this.title_lbl.node.active = this.gameData.questionPic == "" && this.gameData.questionText != "";
         this.title_lbl.node.parent.getComponent(cc.Layout).updateLayout();
     }
 
@@ -125,7 +127,7 @@ export default class GameUI extends cc.Component {
         this.handleOptionState();
         this.handleCheckBtnState();
 
-        if (SyncDataManager.getSyncData().frameSyncData.isGameOver) {            
+        if (SyncDataManager.getSyncData().frameSyncData.isGameOver) {
             for (let i = 0; i < this.option_panel.childrenCount; i++) {
                 let option = this.option_panel.children[i];
                 option.active = false;
@@ -227,7 +229,10 @@ export default class GameUI extends cc.Component {
                 }
                 // this.nextLevel();
             });
-        }, 3);
+        }, 2);
+        this.scheduleOnce(() => {
+            SoundManager.playEffect(SoundConfig.soudlist["咻"], false, false, false);
+        }, 0.5);
     }
 
     private handleFalse() {
@@ -252,6 +257,9 @@ export default class GameUI extends cc.Component {
                 }
             });
         }, 2.5);
+        this.scheduleOnce(() => {
+            SoundManager.playEffect(SoundConfig.soudlist["咻"], false, false, false);
+        }, 0.5);
     }
 
     private nextLevel() {
@@ -272,27 +280,37 @@ export default class GameUI extends cc.Component {
     private handleGameOver() {
         this.endLayer.active = true;
         let isAllRight = true;
+        this.endLayer.getChildByName("panel").removeAllChildren();
         for (let i = 0; i < EditorManager.editorData.GameData.length; i++) {
             if (SyncDataManager.getSyncData().customSyncData.rightTimu[i]) {
-                let jiangbei = cc.instantiate(this.jiangbei_prefab);
-                jiangbei.parent = this.endLayer.getChildByName("panel");
+                let end_item = cc.instantiate(this.end_item_prefab);
+                end_item.parent = this.endLayer.getChildByName("panel");
+                end_item.getChildByName("lbl").getComponent(cc.Label).string = "第" + (i + 1) + "题";
+                end_item.getChildByName("img_cuowu").active = false;
+                end_item.getChildByName("title").getComponent(cc.Label).string = "正确";
             } else {
-                let zhadan = cc.instantiate(this.zhadan_prefab);
-                zhadan.parent = this.endLayer.getChildByName("panel");
+                let end_item = cc.instantiate(this.end_item_prefab);
+                end_item.parent = this.endLayer.getChildByName("panel");
+                end_item.getChildByName("lbl").getComponent(cc.Label).string = "第" + (i + 1) + "题";
+                end_item.getChildByName("img_cuowu").active = true;
+                end_item.getChildByName("title").getComponent(cc.Label).string = "错误";
                 isAllRight = false;
             }
-        } 
+        }
         if (isAllRight) {
-            SoundManager.playEffect(SoundConfig.soudlist["激烈的掌声欢呼音效"], false, false, false, () => {
-                ListenerManager.dispatch(EventType.GAME_OVER);
-            });
-            Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_happy_meidong', true);
+            // SoundManager.playEffect(SoundConfig.soudlist["激烈的掌声欢呼音效"], false, false, false, () => {
+            // ListenerManager.dispatch(EventType.GAME_OVER);
+            // });
+            Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_happy', true);
         } else {
-            SoundManager.playEffect(SoundConfig.soudlist["稀稀拉拉的掌声音效"], false, false, false, () => {
-                ListenerManager.dispatch(EventType.GAME_OVER);
-            });
-            Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_embarrassed_meidong', true);
-        }        
+            // SoundManager.playEffect(SoundConfig.soudlist["稀稀拉拉的掌声音效"], false, false, false, () => {
+            // ListenerManager.dispatch(EventType.GAME_OVER);
+            // });
+            Tools.playSpine(this.endLayer.getChildByName("pipi").getComponent(sp.Skeleton), 'pipi_embarrassed', true);
+        }
+        this.scheduleOnce(() => {
+            ListenerManager.dispatch(EventType.GAME_OVER);
+        }, 3);
     }
 
 }

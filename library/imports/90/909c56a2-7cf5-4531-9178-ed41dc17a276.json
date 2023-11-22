@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_tijiaodaan",
+    "texture": "c1250946-d5c7-486f-a754-dadbc551243f",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      272,
+      108
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      272,
+      108
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -18,6 +18,7 @@ export class NetWorkClass {
     //     : 'https://test-class-api-online.saasp.vdyoo.com/micro-class/storage/v1/tencent/sts';
     // public readonly COS_BASE_URL = this.isOnlineEnv ? 'https://micro-class.xuepeiyou.com/' : 'https://micro-class-test.xuepeiyou.com/';
 
+
     public readonly GET_QUESTION = this.BASE + '/get';
     public readonly GET_USER_PROGRESS = this.BASE + '/get/answer';
     public readonly GET_TITLE = this.BASE + '/get/title';

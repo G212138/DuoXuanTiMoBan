@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_muban",
+    "texture": "e150636f-36e7-4535-aa45-2dbdf8898d53",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      233,
+      78
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      233,
+      78
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
